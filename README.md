@@ -13,7 +13,7 @@
 3.  **`abstraction.py`**: การทำ Abstraction (คลาสโครงร่าง) โดยใช้ `ABC`
 4.  **`encapsulate.py`**: การปกป้องข้อมูล (Encapsulation) และ Getter/Setter
 5.  **`polymorphism.py`**: การพหุสัณฐาน (Polymorphism) และการ Override
-6.  **[relationship/association.py](relationship/association.py)**: ความสัมพันธ์ระหว่างวัตถุ (Association) ([อ่านรายละเอียดเพิ่มเติมในไดเรกทอรี](relationship/README.md))
+6.  **[relationship/README.md](relationship/README.md)**: ความสัมพันธ์ระหว่างวัตถุ (Object Relationships) - เรียนรู้ Dependency, Association, Aggregation, Composition, Implementation, Inheritance และ **Runtime Flexibility vs Class Explosion**
 7.  **[solid/principle.py](solid/principle.py)**: หลักการออกแบบซอฟต์แวร์ที่ดี (SOLID Principles) ([อ่านรายละเอียดเพิ่มเติมในไดเรกทอรี](solid/README.md))
 8.  **[solid/exercises/](solid/exercises/)**: แบบฝึกหัดทบทวนความเข้าใจเรื่อง SOLID Principles ✍️
 
@@ -85,10 +85,23 @@ for s in shapes:
     print_area(s) # เรียกใช้เมธอดเดียวกัน แต่ทำงานต่างกันตามประเภทวัตถุ
 ```
 
-### 6. ความสัมพันธ์ระหว่างวัตถุ ([relationship/association.py](relationship/association.py))
-เรียนรู้ว่าวัตถุต่างๆ ทำงานร่วมกันอย่างไร:
-- **Association**: คลาส `Professor` มีความสัมพันธ์กับ `Student` และ `Course`
-- **อ่านรายละเอียดเพิ่มเติมและตัวอย่างโค้ดได้ที่: [relationship/README.md](relationship/README.md)**
+### 6. ความสัมพันธ์ระหว่างวัตถุ ([relationship/README.md](relationship/README.md))
+เรียนรู้ว่าวัตถุต่างๆ ทำงานร่วมกันอย่างไร โดยแบ่งระดับความผูกพัน (Coupling) จากอ่อนแอไปหาแข็งแกร่งที่สุด:
+- **Dependency**: การพึ่งพาในช่วงเวลาสั้นๆ
+- **Association**: การรู้จักและเชื่อมโยงอย่างถาวร
+- **Aggregation**: ส่วนรวม-ส่วนย่อย ที่อิสระต่อกัน
+- **Composition**: ส่วนรวม-ส่วนย่อย ที่ผูกพันกัน (Life Cycle)
+- **Implementation**: การนำอินเทอร์เฟซไปใช้งาน
+- **Inheritance**: การสืบทอดทั้งคุณสมบัติและการทำงาน (**เรียนรู้ข้อเสียและหลักการ Favor Composition Over Inheritance**)
+
+```python
+# ตัวอย่าง Composition (ความสัมพันธ์ระดับแข็งแกร่ง)
+class House:
+    def __init__(self):
+        self.rooms = [Room("Kitchen"), Room("Bedroom")]
+        # เมื่อ House หายไป Room เหล่านี้ก็จะสลายไปด้วย
+```
+- **อ่านรายละเอียดเพิ่มเติมและตัวอย่างได้ที่: [relationship/README.md](relationship/README.md) และ `relationship/composition_vs_inheritance.py`**
 
 ### 7. หลักการ SOLID ([solid/principle.py](solid/principle.py))
 ไฟล์นี้รวบรวมหลักการออกแบบที่สำคัญ 5 ประการ:
