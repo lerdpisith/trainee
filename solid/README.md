@@ -14,18 +14,41 @@
 ### 1. SRP: Single Responsibility Principle
 **"หนึ่งคลาสควรมีหน้าที่รับผิดชอบเพียงอย่างเดียว"**
 - คลาส `Human` ดูแลเฉพาะข้อมูลพื้นฐานส่วนบุคคล (ชื่อ, อายุ) เท่านั้น โดยไม่ไปยุ่งกับการลงทะเบียนเรียน
+```python
+class Human:
+    def __init__(self, name): self.name = name
+    def get_name(self): return self.name
+    # ไม่ควรมี def save_to_db() ที่นี่
+```
 
 ### 2. OCP: Open/Closed Principle
 **"เปิดสำหรับการขยาย แต่ปิดสำหรับการแก้ไข"**
 - คลาส `Customer` เป็น Abstract Class ที่ทำหน้าที่เป็น Interface ทำให้เราสามารถเพิ่มลูกค้าประเภทใหม่ (เช่น `V2Student`) ได้โดยไม่ต้องแก้ไขโค้ดที่เรียกใช้งาน `Customer` เดิม
+```python
+class Customer(ABC):
+    @abstractmethod
+    def register(self): pass
+
+class Student(Customer):
+    def register(self): print("Student Registering...")
+```
 
 ### 3. LSP: Liskov Substitution Principle
 **"คลาสลูกต้องสามารถใช้งานแทนคลาสแม่ได้เสมอ"**
 - ทั้ง `Student` และ `V2Student` สามารถถูกส่งเข้าไปใน `RegisterManager` ได้เหมือนกัน เพราะทั้งคู่ทำตามข้อกำหนดของ `Customer`
+```python
+def process_register(customer: Customer):
+    customer.register() # ใส่ Student หรือ V2Student ก็ทำงานได้เหมือนกัน
+```
 
 ### 4. DIP: Dependency Inversion Principle
 **"ควรยึดติดกับ Abstraction (Interface) ไม่ใช่คลาสที่ทำงานเฉพาะเจาะจง"**
 - คลาส `RegisterManager` รับค่าเป็น `Customer` (Abstraction) แทนที่จะรับเฉพาะ `Student` (Concrete class) ทำให้มันสามารถจัดการลูกค้าได้ทุกประเภทที่สืบทอดมาจาก `Customer`
+```python
+class RegisterManager:
+    def __init__(self, customer: Customer):
+        self.customer = customer # ยึดติดกับ Interface
+```
 
 ---
 

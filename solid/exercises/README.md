@@ -10,18 +10,44 @@
 1.  **`exercise_srp.py`**: (Single Responsibility Principle)
     *   **ปัญหา**: คลาส `Order` ทำหน้าที่คำนวณเงิน **และ** พิมพ์ใบเสร็จในคลาสเดียวกัน
     *   **โจทย์**: แยกคลาส `ReceiptPrinter` ออกมาเพื่อให้คลาส `Order` สนใจแค่เรื่องการคำนวณ (Calculation)
+    *   **ตัวอย่าง**:
+        ```python
+        # ❌ แย่: หนึ่งคลาสทำหลายอย่าง
+        class Order:
+            def calculate_total(self): ...
+            def print_receipt(self): ... # ไม่ควรอยู่ที่นี่
+        ```
 
 2.  **`exercise_ocp.py`**: (Open/Closed Principle)
     *   **ปัญหา**: คลาส `DiscountCalculator` ใช้ `if-elif` ในการตรวจสอบประเภทลูกค้า
     *   **โจทย์**: ใช้ Polymorphism โดยสร้าง Abstract Class `Discount` และ subclasses (เช่น `VIPDiscount`, `StandardDiscount`) เพื่อให้เราเพิ่มส่วนลดใหม่ได้โดยไม่ต้องแก้คลาสเดิม
+    *   **ตัวอย่าง**:
+        ```python
+        # ❌ แย่: ต้องแก้โค้ดทุกครั้งที่เพิ่มประเภทส่วนลด
+        if type == "VIP": ...
+        elif type == "Standard": ...
+        ```
 
 3.  **`exercise_lsp.py`**: (Liskov Substitution Principle)
     *   **ปัญหา**: คลาสลูก `Ostrich` (นกกระจอกเทศ) สืบทอดมาจาก `Bird` แต่พ่น Error เมื่อเรียกใช้ `fly()`
     *   **โจทย์**: ปรับปรุงโครงสร้างคลาส (เช่น แยกคลาส `FlyingBird` และ `NonFlyingBird`) เพื่อไม่ให้คลาสลูกต้องมีพฤติกรรมที่ขัดแย้งกับคลาสแม่
+    *   **ตัวอย่าง**:
+        ```python
+        # ❌ แย่: คลาสลูกทำงานแทนคลาสแม่ไม่ได้ (พ่น Error)
+        class Ostrich(Bird):
+            def fly(self): raise Exception("บินไม่ได้!")
+        ```
 
 4.  **`exercise_dip.py`**: (Dependency Inversion Principle)
     *   **ปัญหา**: คลาส `Register` เรียกใช้งาน `PostgreSQLDatabase` โดยตรง (High-level module depends on low-level module)
     *   **โจทย์**: สร้าง Interface (Abstract Class) ชื่อ `Database` และให้ `Register` รับคลาสที่สืบทอดมาจาก `Database` แทน
+    *   **ตัวอย่าง**:
+        ```python
+        # ❌ แย่: ยึดติดกับคลาสเฉพาะทาง
+        class Register:
+            def __init__(self):
+                self.db = PostgreSQLDatabase() # ยึดติดเกินไป
+        ```
 
 ---
 
