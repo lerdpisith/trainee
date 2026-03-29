@@ -1,23 +1,43 @@
-# ❌ ตัวอย่างที่ละเมิด LSP (Liskov Substitution Principle)
-# โจทย์: ปรับปรุงการออกแบบเพื่อไม่ให้คลาสลูก (Ostrich) ต้องโยน Error
-# เพราะคลาสแม่ Bird สั่งให้ fly() ได้ แต่นกกระจอกเทศบินไม่ได้
+from abc import ABC, abstractmethod
 
-class Bird:
-    def fly(self):
-        print("I am flying")
+
+class Bird(ABC):
+    @abstractmethod
+    def make_sound(self) -> None:
+        pass
+
+
+class Flyable(ABC):
+    @abstractmethod
+    def fly(self) -> None:
+        pass
+
+
+class Sparrow(Bird, Flyable):
+    def make_sound(self) -> None:
+        print("Sparrow: Tweet tweet!")
+
+    def fly(self) -> None:
+        print("Sparrow: Flap flap... I'm flying!")
+
+
+class Eagle(Bird, Flyable):
+    def make_sound(self) -> None:
+        print("Eagle: Screech!")
+
+    def fly(self) -> None:
+        print("Eagle: Soaring high in the sky!")
+
 
 class Ostrich(Bird):
-    def fly(self):
-        # ละเมิด LSP: คลาสลูกไม่สามารถทำงานแทนคลาสแม่ได้ (บินไม่ได้)
-        raise NotImplementedError("Ostriches cannot fly")
+    def make_sound(self) -> None:
+        print("Ostrich: Boom boom!")
 
-def make_bird_fly(bird: Bird):
-    bird.fly()
+    def run(self) -> None:
+        print("Ostrich: Running at 70 km/h!")
+
 
 if __name__ == "__main__":
-    my_bird = Bird()
-    make_bird_fly(my_bird)
-
-    # ตรงนี้จะ Error! เพราะ Ostrich ไม่สามารถทำงานแทน Bird ได้สมบูรณ์
-    ostrich = Ostrich()
-    make_bird_fly(ostrich)
+    birds = [Sparrow(), Eagle(), Ostrich()]
+    for bird in birds:
+        bird.make_sound()

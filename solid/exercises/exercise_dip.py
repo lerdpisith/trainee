@@ -1,19 +1,38 @@
-# ❌ ตัวอย่างที่ละเมิด DIP (Dependency Inversion Principle)
-# โจทย์: ปรับปรุงให้ Register รับ Abstraction (เช่น Database Interface) แทน
-# จะได้เปลี่ยน Database ได้โดยไม่ต้องแก้ที่ Register
+from abc import ABC, abstractmethod
 
-class PostgreSQLDatabase:
-    def save(self, data):
-        print(f"Saving '{data}' to PostgreSQL Database...")
+
+class Database(ABC):
+    @abstractmethod
+    def save(self, data: str) -> None:
+        pass
+
+
+class PostgreSQLDatabase(Database):
+    def save(self, data: str) -> None:
+        print(f"[PostgreSQL] Saving '{data}'...")
+
+
+class MySQLDatabase(Database):
+    def save(self, data: str) -> None:
+        print(f"[MySQL] Saving '{data}'...")
+
+
+class MockDatabase(Database):
+    def __init__(self):
+        self.saved_data = []
+
+    def save(self, data: str) -> None:
+        self.saved_data.append(data)
+
 
 class Register:
-    def __init__(self):
-        # คลาส Register (High-level) ยึดติดกับ PostgreSQL (Low-level) โดยตรง
-        self.db = PostgreSQLDatabase()
+    def __init__(self, db: Database):
+        self.db = db
 
-    def sign_up(self, user):
+    def sign_up(self, user: str) -> None:
         self.db.save(user)
 
+
 if __name__ == "__main__":
-    reg = Register()
+    reg = Register(db=PostgreSQLDatabase())
     reg.sign_up("Alice")

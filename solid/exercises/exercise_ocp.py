@@ -1,18 +1,48 @@
-# ❌ ตัวอย่างที่ละเมิด OCP (Open/Closed Principle)
-# โจทย์: หากต้องการเพิ่มส่วนลด "Premium" ต้องมาแก้ที่คลาสเดิม
-# ให้ปรับปรุงโดยการใช้ Abstraction (Abstract Class) และ Polymorphism
+from abc import ABC, abstractmethod
+
+
+class DiscountStrategy(ABC):
+    @abstractmethod
+    def calculate(self, amount: float) -> float:
+        pass
+
+
+class VIPDiscount(DiscountStrategy):
+    def calculate(self, amount: float) -> float:
+        return amount * 0.8
+
+
+class StandardDiscount(DiscountStrategy):
+    def calculate(self, amount: float) -> float:
+        return amount * 0.9
+
+
+class NoDiscount(DiscountStrategy):
+    def calculate(self, amount: float) -> float:
+        return amount
+
+
+class PremiumDiscount(DiscountStrategy):
+    def calculate(self, amount: float) -> float:
+        return amount * 0.7
+
 
 class DiscountCalculator:
-    def calculate(self, amount, customer_type):
-        if customer_type == "VIP":
-            return amount * 0.8  # ลด 20%
-        elif customer_type == "Standard":
-            return amount * 0.9  # ลด 10%
-        # หากต้องการเพิ่ม "Premium" จะต้องแก้ที่นี่ (ละเมิด OCP)
-        else:
-            return amount
+    def __init__(self, strategy: DiscountStrategy):
+        self.strategy = strategy
+
+    def calculate(self, amount: float) -> float:
+        return self.strategy.calculate(amount)
+
 
 if __name__ == "__main__":
-    calc = DiscountCalculator()
-    print(f"VIP price: {calc.calculate(100, 'VIP')}")
-    print(f"Standard price: {calc.calculate(100, 'Standard')}")
+    amount = 100
+    scenarios = [
+        ("VIP",      VIPDiscount()),
+        ("Standard", StandardDiscount()),
+        ("Normal",   NoDiscount()),
+        ("Premium",  PremiumDiscount()),
+    ]
+    for label, strategy in scenarios:
+        calc = DiscountCalculator(strategy)
+        print(f"{label:10} price: {calc.calculate(amount):.2f}")
